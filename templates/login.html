@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CycloFix — Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>CycloFix 🌸</h1>
+        <h2>Login</h2>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p class="error">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <div class="form-group">
+            <input type="email" name="email" placeholder="Email" required>
+        </div>
+        <div class="form-group">
+            <input type="password" name="password" placeholder="Password" required>
+        </div>
+        <button onclick="submitLogin()">Login</button>
+        <p>Don't have an account? <a href="/signup">Sign up</a></p>
+    </div>
+    <script>
+    function submitLogin() {
+        const email = document.querySelector('input[name="email"]').value;
+        const password = document.querySelector('input[name="password"]').value;
+        fetch('/login', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: `email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
+        }).then(r => { if(r.redirected) window.location.href = r.url; });
+    }
+    </script>
+</body>
+</html>
