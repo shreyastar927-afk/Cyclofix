@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CycloFix — Log Pain</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>CycloFix 🌸</h1>
+        <h2>How are you feeling?</h2>
+
+        <div class="form-group">
+            <label>Pain intensity</label>
+            <div class="slider-container">
+                <input type="range" min="1" max="10" value="5" id="painSlider" 
+                       oninput="updateSlider(this.value)">
+                <div class="slider-value" id="sliderValue">5</div>
+            </div>
+            <div class="slider-labels">
+                <span>Mild</span>
+                <span>Moderate</span>
+                <span>Severe</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Pain type</label>
+            <div class="pain-types">
+                <button type="button" class="type-btn" onclick="selectType(this, 'cramp')">
+                    🔄 Cramp
+                </button>
+                <button type="button" class="type-btn" onclick="selectType(this, 'ache')">
+                    😔 Ache
+                </button>
+                <button type="button" class="type-btn" onclick="selectType(this, 'sharp')">
+                    ⚡ Sharp
+                </button>
+                <button type="button" class="type-btn" onclick="selectType(this, 'back')">
+                    🔙 Back
+                </button>
+            </div>
+        </div>
+
+        <button onclick="submitLog()" id="submitBtn" disabled>
+            Log Pain
+        </button>
+
+        <p><a href="/">← Back to home</a></p>
+    </div>
+
+    <script>
+    let selectedType = null;
+
+    function updateSlider(value) {
+        document.getElementById('sliderValue').textContent = value;
+        const colors = {
+            low: '#4CAF50',
+            mid: '#FF9800', 
+            high: '#e91e8c'
+        };
+        const color = value <= 3 ? colors.low : value <= 6 ? colors.mid : colors.high;
+        document.getElementById('sliderValue').style.color = color;
+        checkReady();
+    }
+
+    function selectType(btn, type) {
+        document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedType = type;
+        checkReady();
+    }
+
+    function checkReady() {
+        document.getElementById('submitBtn').disabled = !selectedType;
+    }
+
+    function submitLog() {
+        const intensity = document.getElementById('painSlider').value;
+        fetch('/log', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: `pain_intensity=${intensity}&pain_type=${encodeURIComponent(selectedType)}`
+        }).then(r => { if(r.redirected) window.location.href = r.url; });
+    }
+    </script>
+</body>
+</html>

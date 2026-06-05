@@ -111,3 +111,65 @@ header p {
 header a {
     font-size: 12px;
 }
+.slider-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 0.5rem 0;
+}
+
+input[type="range"] {
+    flex: 1;
+    accent-color: #e91e8c;
+    height: 6px;
+    border: none;
+    padding: 0;
+}
+
+.slider-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #e91e8c;
+    min-width: 2rem;
+}
+
+.slider-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #999;
+    margin-top: 4px;
+}
+
+.pain-types {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.type-btn {
+    background: #fff5f7;
+    color: #333;
+    border: 1.5px solid #eee;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.type-btn:hover {
+    border-color: #e91e8c;
+}
+
+.type-btn.selected {
+    background: #e91e8c;
+    color: white;
+    border-color: #e91e8c;
+}
+
+#submitBtn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}

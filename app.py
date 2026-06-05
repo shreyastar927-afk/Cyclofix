@@ -71,7 +71,36 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('login'))
+@app.route('/log', methods=['GET', 'POST'])
+@login_required
+def log_pain():
+    if request.method == 'POST':
+        pain_intensity = int(request.form.get('pain_intensity'))
+        pain_type = request.form.get('pain_type')
 
+        # Auto-calculate cycle day
+        today = date.today()
+        if current_user.last_period_start:
+            cycle_day = (today - current_user.last_period_start).days + 1
+        else:
+            cycle_day = None
+
+        new_log = CycleLog(
+            user_id=current_user.id,
+            date=today,
+            cycle_day=cycle_day,
+            pain_intensity=pain_intensity,
+            pain_type=pain_type
+        )
+        db.session.add(new_log)
+        db.session.commit()
+        return redirect(url_for('suggestions'))
+
+    return render_template('log.html')
+@app.route('/suggestions')
+@login_required
+def suggestions():
+    return render_template('base.html', user=current_user)
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
