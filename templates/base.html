@@ -13,10 +13,39 @@
             <p>Welcome back, {{ user.name }}</p>
             <a href="/logout">Logout</a>
         </header>
-        <main>
-    <a href="/log"><button>Log Pain 🌸</button></a>
-</main>
         
+        <main>
+    <div class="cycle-status">
+        <div class="cycle-day-display">
+            Day {{ current_day }} of your cycle
+        </div>
+        {% if current_day > user.cycle_length %}
+        <div class="cycle-alert">
+            Your period may be due — did it start?
+        </div>
+        {% endif %}
+    </div>
+
+    <button onclick="periodStarted()" 
+            style="background:white;color:#e91e8c;border:1.5px solid #e91e8c;margin-bottom:8px">
+        🩸 My period started today
+    </button>
+    <a href="/log"><button>Log Pain 🌸</button></a>
+    <a href="/patterns"><button style="background:white;color:#e91e8c;border:1.5px solid #e91e8c;margin-top:8px">
+        View My Patterns 📊
+    </button></a>
+</main>
+
+<script>
+function periodStarted() {
+    if (confirm('Mark today as the start of your new cycle?')) {
+        fetch('/period_started', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).then(r => { if(r.redirected) window.location.href = r.url; });
+    }
+}
+</script>
     </div>
 </body>
 </html>

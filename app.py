@@ -22,7 +22,12 @@ def load_user(user_id):
 @app.route('/')
 @login_required
 def home():
-    return render_template('base.html', user=current_user)
+    today = date.today()
+    if current_user.last_period_start:
+        current_day = (today - current_user.last_period_start).days + 1
+    else:
+        current_day = 1
+    return render_template('base.html', user=current_user, current_day=current_day)
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -242,6 +247,20 @@ def patterns():
         avg_pain=avg_pain,
         worst_day=worst_day
     )
+@app.route('/period_started', methods=['POST'])
+@login_required
+def period_started():
+    today = date.today()
+    current_user.last_period_start = today
+    
+    # Calculate cycle length from previous cycle if we have data
+    if current_user.last_period_start:
+        days_since = (today - current_user.last_period_start).days
+        if 20 <= days_since <= 45:  # reasonable cycle length range
+            current_user.cycle_length = days_since
+    
+    db.session.commit()
+    return redirect(url_for('home'))
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
