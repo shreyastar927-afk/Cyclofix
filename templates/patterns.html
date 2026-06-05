@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CycloFix — Your Patterns</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>CycloFix 🌸</h1>
+        <h2>Your Patterns</h2>
+
+        {% if worst_day %}
+        <div class="insight-card">
+            <div class="insight-emoji">📊</div>
+            <div class="insight-text">
+                Your most painful day is usually
+                <strong>Day {{ worst_day }}</strong> of your cycle.
+            </div>
+        </div>
+        {% endif %}
+
+        {% if most_common_pain %}
+        <div class="insight-card">
+            <div class="insight-emoji">💡</div>
+            <div class="insight-text">
+                Your most common pain type is
+                <strong>{{ most_common_pain[0] | capitalize }}</strong>.
+            </div>
+        </div>
+        {% endif %}
+
+        {% if top_helpers %}
+        <div class="section-title">What helps you most</div>
+        {% for suggestion, count in top_helpers %}
+        <div class="helper-card">
+            <span class="helper-name">
+                {% if suggestion == 'heat' %}🔥 Heat
+                {% elif suggestion == 'breathing' %}🌬️ Breathing
+                {% elif suggestion == 'rest' %}🛏️ Rest
+                {% elif suggestion == 'movement' %}🚶 Movement
+                {% endif %}
+            </span>
+            <span class="helper-count">Helped {{ count }}x</span>
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        {% if avg_pain %}
+        <div class="section-title">Pain across your cycle</div>
+        <div class="chart-container">
+            <canvas id="painChart"></canvas>
+        </div>
+        {% endif %}
+
+        <p style="margin-top:1.5rem">
+            <a href="/log">← Log Pain</a> · <a href="/">Home</a>
+        </p>
+    </div>
+
+    {% if avg_pain %}
+    <script>
+        const days = {{ avg_pain.keys() | list | tojson }};
+        const intensities = {{ avg_pain.values() | list | tojson }};
+
+        new Chart(document.getElementById('painChart'), {
+            type: 'line',
+            data: {
+                labels: days.map(d => 'Day ' + d),
+                datasets: [{
+                    label: 'Average Pain',
+                    data: intensities,
+                    borderColor: '#e91e8c',
+                    backgroundColor: 'rgba(233, 30, 140, 0.1)',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#e91e8c',
+                    pointRadius: 5,
+                    tension: 0.3,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        min: 0,
+                        max: 10,
+                        ticks: { stepSize: 2 }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    </script>
+    {% endif %}
+</body>
+</html>

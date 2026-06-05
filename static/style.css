@@ -173,3 +173,160 @@ input[type="range"] {
     background: #ccc;
     cursor: not-allowed;
 }
+.pain-summary {
+    background: #fff5f7;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 1.2rem;
+}
+
+.suggestions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 1rem;
+}
+
+.suggestion-card {
+    background: #fff;
+    border: 1.5px solid #eee;
+    border-radius: 12px;
+    padding: 14px;
+    text-align: left;
+    transition: border-color 0.2s;
+}
+
+.previously-helped {
+    border-color: #e91e8c;
+    background: #fff5f7;
+}
+
+.suggestion-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.suggestion-emoji {
+    font-size: 1.8rem;
+    flex-shrink: 0;
+}
+
+.suggestion-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 3px;
+}
+
+.suggestion-desc {
+    font-size: 12px;
+    color: #888;
+    line-height: 1.5;
+}
+
+.helped-badge {
+    font-size: 11px;
+    color: #e91e8c;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.feedback-buttons {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.feedback-label {
+    font-size: 12px;
+    color: #999;
+    flex-shrink: 0;
+}
+
+.feedback-btn {
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    border: 1.5px solid #eee;
+    background: white;
+    cursor: pointer;
+    transition: all 0.15s;
+    width: auto;
+    margin: 0;
+}
+
+.feedback-btn.yes:hover { background: #4CAF50; color: white; border-color: #4CAF50; }
+.feedback-btn.somewhat:hover { background: #FF9800; color: white; border-color: #FF9800; }
+.feedback-btn.no:hover { background: #ccc; color: white; border-color: #ccc; }
+
+.feedback-thanks {
+    font-size: 12px;
+    color: #e91e8c;
+    margin-top: 6px;
+}
+.insight-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #fff5f7;
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.insight-emoji {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.insight-text {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.5;
+}
+
+.section-title {
+    font-size: 12px;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 1.2rem 0 8px;
+    text-align: left;
+}
+
+.helper-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    border: 1.5px solid #eee;
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 6px;
+}
+
+.helper-name {
+    font-size: 13px;
+    color: #333;
+    font-weight: 500;
+}
+
+.helper-count {
+    font-size: 12px;
+    color: #e91e8c;
+    font-weight: 600;
+}
+
+.chart-container {
+    margin-top: 8px;
+    background: white;
+    border-radius: 12px;
+    padding: 12px;
+    border: 1.5px solid #eee;
+}

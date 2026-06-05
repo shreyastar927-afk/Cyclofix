@@ -195,6 +195,53 @@ def feedback():
         db.session.commit()
 
     return '', 200
+@app.route('/patterns')
+@login_required
+def patterns():
+    from collections import Counter
+
+    # Get all logs for this user
+    all_logs = CycleLog.query.filter_by(
+        user_id=current_user.id
+    ).order_by(CycleLog.date.asc()).all()
+
+    # Build pain timeline data
+    timeline = []
+    for log in all_logs:
+        if log.pain_intensity and log.cycle_day:
+            timeline.append({
+                'day': log.cycle_day,
+                'intensity': log.pain_intensity,
+                'type': log.pain_type
+            })
+
+    # What helped most
+    helpful_logs = [l for l in all_logs if l.relief_helped == 'yes' and l.relief_suggestion]
+    help_counts = Counter([l.relief_suggestion for l in helpful_logs])
+    top_helpers = help_counts.most_common(3)
+
+    # Pain type breakdown
+    pain_types = Counter([l.pain_type for l in all_logs if l.pain_type])
+    most_common_pain = pain_types.most_common(1)[0] if pain_types else None
+
+    # Average pain per cycle day
+    day_pain = {}
+    for log in all_logs:
+        if log.cycle_day and log.pain_intensity:
+            if log.cycle_day not in day_pain:
+                day_pain[log.cycle_day] = []
+            day_pain[log.cycle_day].append(log.pain_intensity)
+    avg_pain = {day: round(sum(vals)/len(vals), 1) for day, vals in day_pain.items()}
+    worst_day = max(avg_pain, key=avg_pain.get) if avg_pain else None
+
+    return render_template('patterns.html',
+        user=current_user,
+        timeline=timeline,
+        top_helpers=top_helpers,
+        most_common_pain=most_common_pain,
+        avg_pain=avg_pain,
+        worst_day=worst_day
+    )
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
