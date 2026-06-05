@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CycloFix — Relief Suggestions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>CycloFix 🌸</h1>
+        <h2>Here's what might help</h2>
+
+        {% if log %}
+        <div class="pain-summary">
+            Pain: <strong>{{ log.pain_intensity }}/10</strong> · 
+            <strong>{{ log.pain_type | capitalize }}</strong> · 
+            Day <strong>{{ log.cycle_day }}</strong>
+        </div>
+        {% endif %}
+
+        <div class="suggestions-list">
+            {% for s in suggestions %}
+            <div class="suggestion-card {% if s in helpful %}previously-helped{% endif %}">
+                <div class="suggestion-header">
+                    <span class="suggestion-emoji">{{ details[s].emoji }}</span>
+                    <div class="suggestion-text">
+                        <div class="suggestion-title">{{ details[s].title }}</div>
+                        <div class="suggestion-desc">{{ details[s].desc }}</div>
+                    </div>
+                </div>
+                {% if s in helpful %}
+                <div class="helped-badge">✓ Helped you before</div>
+                {% endif %}
+                <div class="feedback-buttons">
+                    <span class="feedback-label">Did this help?</span>
+                    <button class="feedback-btn yes" 
+                            onclick="submitFeedback('{{ s }}', 'yes', this)">
+                        Yes
+                    </button>
+                    <button class="feedback-btn somewhat"
+                            onclick="submitFeedback('{{ s }}', 'somewhat', this)">
+                        Somewhat
+                    </button>
+                    <button class="feedback-btn no"
+                            onclick="submitFeedback('{{ s }}', 'no', this)">
+                        No
+                    </button>
+                </div>
+                <div class="feedback-thanks" id="thanks-{{ s }}" style="display:none">
+                    Thanks for the feedback! 🌸
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <p><a href="/log">← Log again</a> · <a href="/">Home</a></p>
+    </div>
+
+    <script>
+    function submitFeedback(suggestion, response, btn) {
+        fetch('/feedback', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: `suggestion=${encodeURIComponent(suggestion)}&response=${encodeURIComponent(response)}`
+        }).then(r => {
+            if (r.ok) {
+                // Disable all buttons for this suggestion
+                btn.closest('.feedback-buttons').querySelectorAll('button').forEach(b => {
+                    b.disabled = true;
+                    b.style.opacity = '0.4';
+                });
+                // Highlight selected button
+                btn.style.opacity = '1';
+                btn.style.fontWeight = '700';
+                // Show thanks message
+                document.getElementById('thanks-' + suggestion).style.display = 'block';
+            }
+        });
+    }
+    </script>
+</body>
+</html>
