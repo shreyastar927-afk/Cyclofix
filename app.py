@@ -2,7 +2,8 @@ from flask import Flask, render_template, redirect, url_for, request, flash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import db, User, CycleLog
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
+from datetime import timedelta
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'cyclofix-secret-key'
@@ -67,7 +68,8 @@ def login():
             flash('Invalid email or password.')
             return redirect(url_for('login'))
 
-        login_user(user)
+        remember = request.form.get('remember') == 'true'
+        login_user(user, remember=remember, duration = timedelta(days=365))
         return redirect(url_for('home'))
 
     return render_template('login.html')
