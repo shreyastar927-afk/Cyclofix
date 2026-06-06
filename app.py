@@ -22,7 +22,8 @@ def load_user(user_id):
 @app.route('/')
 @login_required
 def home():
-    today = date.today()
+    log_date_str = request.form.get('log_date')
+    today = datetime.strptime(log_date_str, '%Y-%m-%d').date() if log_date_str else date.today()
     if current_user.last_period_start:
         current_day = (today - current_user.last_period_start).days + 1
     else:
@@ -101,7 +102,8 @@ def log_pain():
         db.session.commit()
         return redirect(url_for('suggestions'))
 
-    return render_template('log.html')
+    from datetime import date as date_type
+    return render_template('log.html', today=date_type.today())
 @app.route('/suggestions')
 @login_required
 def suggestions():

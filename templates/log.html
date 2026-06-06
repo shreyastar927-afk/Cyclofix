@@ -10,6 +10,11 @@
     <div class="container">
         <h1>CycloFix 🌸</h1>
         <h2>How are you feeling?</h2>
+        <div class="form-group">
+    <label>When did this happen?</label>
+    <input type="date" id="logDate" name="log_date" 
+           max="{{ today }}" value="{{ today }}">
+</div>
 
         <div class="form-group">
             <label>Pain intensity</label>
@@ -75,15 +80,16 @@
     function checkReady() {
         document.getElementById('submitBtn').disabled = !selectedType;
     }
-
     function submitLog() {
-        const intensity = document.getElementById('painSlider').value;
-        fetch('/log', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: `pain_intensity=${intensity}&pain_type=${encodeURIComponent(selectedType)}`
-        }).then(r => { if(r.redirected) window.location.href = r.url; });
-    }
+    const intensity = document.getElementById('painSlider').value;
+    const logDate = document.getElementById('logDate').value;
+    fetch('/log', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: `pain_intensity=${intensity}&pain_type=${encodeURIComponent(selectedType)}&log_date=${encodeURIComponent(logDate)}`
+    }).then(r => { if(r.redirected) window.location.href = r.url; });
+}
+    
     </script>
 </body>
 </html>
