@@ -36,6 +36,10 @@
     <a href="/patterns"><button style="background:white;color:#e91e8c;border:1.5px solid #e91e8c;margin-top:8px">
         View My Patterns 📊
     </button></a>
+    <button id="installBtn" onclick="installApp()" 
+        style="display:none;background:white;color:#e91e8c;border:1.5px solid #e91e8c;margin-top:8px;font-size:13px">
+    📲 Install CycloFix App
+</button>
 </main>
 
 <script>
@@ -50,8 +54,29 @@ function periodStarted() {
 </script>
     </div>
 <script>
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById('installBtn').style.display = 'block';
+});
+
+window.addEventListener('appinstalled', () => {
+    document.getElementById('installBtn').style.display = 'none';
+});
+
+function installApp() {
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((result) => {
+            deferredPrompt = null;
+        });
+    }
+}
+
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/static/sw.js')
+    navigator.serviceWorker.register('/sw.js')
         .then(() => console.log('CycloFix SW registered'))
         .catch(err => console.log('SW error:', err));
 }
