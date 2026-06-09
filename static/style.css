@@ -330,3 +330,21 @@ input[type="range"] {
     padding: 12px;
     border: 1.5px solid #eee;
 }
+.cycle-status {
+    background: #fff5f7;
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 1rem;
+}
+
+.cycle-day-display {
+    font-size: 15px;
+    font-weight: 600;
+    color: #e91e8c;
+}
+
+.cycle-alert {
+    font-size: 12px;
+    color: #888;
+    margin-top: 4px;
+}

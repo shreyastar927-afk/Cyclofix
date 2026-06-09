@@ -27,6 +27,13 @@
         </div>
         {% endif %}
     </div>
+    <div class="insight-card" style="margin-bottom:1rem">
+    <div class="insight-emoji">{{ insight.emoji }}</div>
+    <div class="insight-text">
+        <div style="font-size:11px;color:#e91e8c;font-weight:600;margin-bottom:3px">YOUR WEEKLY INSIGHT</div>
+        {{ insight.text }}
+    </div>
+</div>
 
     <button onclick="periodStarted()" 
             style="background:white;color:#e91e8c;border:1.5px solid #e91e8c;margin-bottom:8px">

@@ -4,6 +4,84 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from models import db, User, CycleLog
 from datetime import datetime, date, timedelta
 from datetime import timedelta
+def generate_weekly_insight(user_id):
+    from collections import Counter
+    from datetime import timedelta
+    
+    # Get logs from the last 4 weeks
+    four_weeks_ago = date.today() - timedelta(weeks=4)
+    recent_logs = CycleLog.query.filter_by(
+        user_id=user_id
+    ).filter(
+        CycleLog.date >= four_weeks_ago,
+        CycleLog.pain_intensity != None
+    ).all()
+    
+    if not recent_logs:
+        return {
+            'text': "Log your pain this cycle to get your first weekly insight 🌸",
+            'emoji': '📊'
+        }
+    
+    # What helped most
+    helpful_logs = [l for l in recent_logs if l.relief_helped == 'yes' and l.relief_suggestion]
+    help_counts = Counter([l.relief_suggestion for l in helpful_logs])
+    
+    # Average pain this cycle
+    avg_pain = round(sum([l.pain_intensity for l in recent_logs]) / len(recent_logs), 1)
+    
+    # Worst day
+    worst_log = max(recent_logs, key=lambda l: l.pain_intensity)
+    
+    # Most common pain type
+    pain_types = Counter([l.pain_type for l in recent_logs if l.pain_type])
+    most_common = pain_types.most_common(1)[0][0] if pain_types else None
+    
+    # Generate insight based on available data
+    insights = []
+    
+    if help_counts:
+        top = help_counts.most_common(1)[0]
+        insights.append({
+            'text': f"{top[0].capitalize()} has helped you {top[1]} time{'s' if top[1] > 1 else ''} recently — it's your most effective relief method.",
+            'emoji': '💡'
+        })
+    
+    if worst_log:
+        insights.append({
+            'text': f"Your most intense pain this cycle was a {worst_log.pain_intensity}/10 on Day {worst_log.cycle_day}. Knowing your pattern helps you prepare.",
+            'emoji': '📈'
+        })
+    
+    if avg_pain:
+        if avg_pain <= 4:
+            insights.append({
+                'text': f"Your average pain this cycle was {avg_pain}/10 — that's on the milder side. Keep logging to track changes over time.",
+                'emoji': '🌸'
+            })
+        elif avg_pain <= 7:
+            insights.append({
+                'text': f"Your average pain this cycle was {avg_pain}/10 — moderate. Your relief suggestions are being personalised based on this.",
+                'emoji': '📊'
+            })
+        else:
+            insights.append({
+                'text': f"Your average pain this cycle was {avg_pain}/10 — that's significant. Consider speaking to a doctor if this is consistent.",
+                'emoji': '⚠️'
+            })
+    
+    if most_common:
+        insights.append({
+            'text': f"{most_common.capitalize()} pain is your most common type. Your suggestions are being tailored around this.",
+            'emoji': '🔍'
+        })
+    
+    # Return a random insight from available ones
+    import random
+    return random.choice(insights) if insights else {
+        'text': "Keep logging your pain to unlock personalised weekly insights 🌸",
+        'emoji': '📊'
+    }
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'cyclofix-secret-key'
@@ -26,13 +104,13 @@ def load_user(user_id):
 @app.route('/')
 @login_required
 def home():
-    log_date_str = request.form.get('log_date')
-    today = datetime.strptime(log_date_str, '%Y-%m-%d').date() if log_date_str else date.today()
+    today = date.today()
     if current_user.last_period_start:
         current_day = (today - current_user.last_period_start).days + 1
     else:
         current_day = 1
-    return render_template('base.html', user=current_user, current_day=current_day)
+    insight = generate_weekly_insight(current_user.id)
+    return render_template('base.html', user=current_user, current_day=current_day, insight=insight)
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
