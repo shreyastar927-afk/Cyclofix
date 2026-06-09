@@ -348,3 +348,9 @@ input[type="range"] {
     color: #888;
     margin-top: 4px;
 }
+.phase-card {
+    background: white;
+    border-radius: 12px;
+    padding: 14px;
+    border: 1.5px solid #eee;
+}

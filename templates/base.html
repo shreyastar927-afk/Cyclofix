@@ -27,6 +27,16 @@
         </div>
         {% endif %}
     </div>
+    <div class="phase-card" style="border-left: 4px solid {{ phase.color }}; margin-bottom:1rem">
+    <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:1.8rem">{{ phase.emoji }}</span>
+        <div style="text-align:left">
+            <div style="font-size:11px;color:#999;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px">Current Phase</div>
+            <div style="font-size:15px;font-weight:600;color:{{ phase.color }}">{{ phase.phase }} Phase</div>
+            <div style="font-size:12px;color:#666;margin-top:3px;line-height:1.5">{{ phase.description }}</div>
+        </div>
+    </div>
+</div>
     <div class="insight-card" style="margin-bottom:1rem">
     <div class="insight-emoji">{{ insight.emoji }}</div>
     <div class="insight-text">

@@ -82,7 +82,35 @@ def generate_weekly_insight(user_id):
         'text': "Keep logging your pain to unlock personalised weekly insights 🌸",
         'emoji': '📊'
     }
-
+def get_cycle_phase(cycle_day, cycle_length=28):
+    if cycle_day <= 5:
+        return {
+            'phase': 'Menstrual',
+            'emoji': '🔴',
+            'description': 'Your body is shedding. Rest is productive, not lazy.',
+            'color': '#e91e8c'
+        }
+    elif cycle_day <= 13:
+        return {
+            'phase': 'Follicular',
+            'emoji': '🌱',
+            'description': 'Energy is rising. Good time to take on new things.',
+            'color': '#4CAF50'
+        }
+    elif cycle_day == 14:
+        return {
+            'phase': 'Ovulation',
+            'emoji': '⭐',
+            'description': 'Peak energy day. You might feel unusually social and sharp.',
+            'color': '#FF9800'
+        }
+    else:
+        return {
+            'phase': 'Luteal',
+            'emoji': '🌙',
+            'description': 'Energy slowing down. Your body is preparing. Be gentle with yourself.',
+            'color': '#9C27B0'
+        }
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'cyclofix-secret-key'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cyclofix.db'
@@ -110,7 +138,8 @@ def home():
     else:
         current_day = 1
     insight = generate_weekly_insight(current_user.id)
-    return render_template('base.html', user=current_user, current_day=current_day, insight=insight)
+    phase = get_cycle_phase(current_day, current_user.cycle_length)
+    return render_template('base.html', user=current_user, current_day=current_day, insight=insight, phase=phase)
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
