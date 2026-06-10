@@ -32,52 +32,61 @@
                 {% if s in helpful %}
                 <div class="helped-badge">✓ Helped you before</div>
                 {% endif %}
-                <div class="feedback-buttons">
-                    <span class="feedback-label">Did this help?</span>
-                    <button class="feedback-btn yes" 
-                            onclick="submitFeedback('{{ s }}', 'yes', this)">
-                        Yes
-                    </button>
-                    <button class="feedback-btn somewhat"
-                            onclick="submitFeedback('{{ s }}', 'somewhat', this)">
-                        Somewhat
-                    </button>
-                    <button class="feedback-btn no"
-                            onclick="submitFeedback('{{ s }}', 'no', this)">
-                        No
-                    </button>
-                </div>
-                <div class="feedback-thanks" id="thanks-{{ s }}" style="display:none">
-                    Thanks for the feedback! 🌸
-                </div>
-            </div>
+              <div class="feedback-section">
+    <div class="feedback-label">After trying this — did it help your pain?</div>
+    <div class="feedback-buttons" id="feedback-{{ s }}">
+        <button class="feedback-btn yes" 
+                onclick="submitFeedback('{{ s }}', 'yes', this)">
+            ✓ Yes
+        </button>
+        <button class="feedback-btn somewhat"
+                onclick="submitFeedback('{{ s }}', 'somewhat', this)">
+            ~ Somewhat
+        </button>
+        <button class="feedback-btn no"
+                onclick="submitFeedback('{{ s }}', 'no', this)">
+            ✗ No
+        </button>
+    </div>
+    <div class="feedback-thanks" id="thanks-{{ s }}" style="display:none">
+        Got it! We'll remember this 🌸
+    </div>
+</div>  
             {% endfor %}
         </div>
 
         <p><a href="/log">← Log again</a> · <a href="/">Home</a></p>
     </div>
 
-    <script>
-    function submitFeedback(suggestion, response, btn) {
-        fetch('/feedback', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: `suggestion=${encodeURIComponent(suggestion)}&response=${encodeURIComponent(response)}`
-        }).then(r => {
-            if (r.ok) {
-                // Disable all buttons for this suggestion
-                btn.closest('.feedback-buttons').querySelectorAll('button').forEach(b => {
-                    b.disabled = true;
-                    b.style.opacity = '0.4';
-                });
-                // Highlight selected button
-                btn.style.opacity = '1';
-                btn.style.fontWeight = '700';
-                // Show thanks message
+   <script>
+const feedbackState = {};
+
+function submitFeedback(suggestion, response, btn) {
+    // Allow changing — remove selected state from all buttons in this group
+    const group = document.getElementById('feedback-' + suggestion);
+    group.querySelectorAll('button').forEach(b => {
+        b.classList.remove('selected-yes', 'selected-somewhat', 'selected-no');
+        b.style.opacity = '1';
+    });
+
+    // Highlight selected button
+    btn.classList.add('selected-' + response);
+
+    // Save to server
+    fetch('/feedback', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: `suggestion=${encodeURIComponent(suggestion)}&response=${encodeURIComponent(response)}`
+    }).then(r => {
+        if (r.ok) {
+            // Show thanks only if first time
+            if (!feedbackState[suggestion]) {
                 document.getElementById('thanks-' + suggestion).style.display = 'block';
             }
-        });
-    }
-    </script>
+            feedbackState[suggestion] = response;
+        }
+    });
+}
+</script>
 </body>
 </html>
