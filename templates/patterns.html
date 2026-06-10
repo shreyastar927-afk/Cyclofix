@@ -97,5 +97,23 @@
         });
     </script>
     {% endif %}
+    <nav class="bottom-nav">
+    <a href="/" class="nav-item {% if request.path == '/' %}active{% endif %}">
+        <span>🏠</span>
+        <span>Home</span>
+    </a>
+    <a href="/log" class="nav-item {% if request.path == '/log' %}active{% endif %}">
+        <span>📝</span>
+        <span>Log Pain</span>
+    </a>
+    <a href="/patterns" class="nav-item {% if request.path == '/patterns' %}active{% endif %}">
+        <span>📊</span>
+        <span>Patterns</span>
+    </a>
+    <a href="/profile" class="nav-item {% if request.path == '/profile' %}active{% endif %}">
+        <span>👤</span>
+        <span>Profile</span>
+    </a>
+</nav>
 </body>
 </html>

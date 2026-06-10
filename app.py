@@ -243,7 +243,7 @@ def log_pain():
         db.session.commit()
         return redirect(url_for('suggestions'))
 
-    from datetime import date as date_type
+    
     return render_template('log.html', today=date_type.today())
 @app.route('/suggestions')
 @login_required
@@ -404,7 +404,23 @@ def period_started():
     
     db.session.commit()
     return redirect(url_for('home'))
-if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
-    app.run(debug=True)
+@app.route('/profile', methods=['GET', 'POST'])
+@login_required
+def profile():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        cycle_length = request.form.get('cycle_length')
+        last_period = request.form.get('last_period_start')
+
+        if name:
+            current_user.name = name
+        if cycle_length:
+            current_user.cycle_length = int(cycle_length)
+        if last_period:
+            current_user.last_period_start = datetime.strptime(last_period, '%Y-%m-%d').date()
+
+        db.session.commit()
+        flash('Profile updated! 🌸')
+        return redirect(url_for('profile'))
+
+    return render_template('profile.html', user=current_user, today=date.today())
