@@ -20,6 +20,9 @@
         {% endif %}
 
         <div class="suggestions-list">
+            <div style="font-size:11px;color:#e91e8c;text-align:right;margin-bottom:8px">
+    🌸 Pink border = helped you before
+</div>
             {% for s in suggestions %}
             <div class="suggestion-card {% if s in helpful %}previously-helped{% endif %}">
                 <div class="suggestion-header">
@@ -49,13 +52,23 @@
         </button>
     </div>
     <div class="feedback-thanks" id="thanks-{{ s }}" style="display:none">
-        Got it! We'll remember this 🌸
-    </div>
-</div>  
-            {% endfor %}
+                    Got it! We'll remember this 🌸
+                </div>
+            </div>
+        </div>
+        {% endfor %}
         </div>
 
-        <p><a href="/log">← Log again</a> · <a href="/">Home</a></p>
+       <div style="display:flex;flex-direction:column;gap:10px;margin-top:1.5rem">
+    <a href="/log">
+        <button>Log New Pain 🌸</button>
+    </a>
+    <a href="/">
+        <button style="background:white;color:#e91e8c;border:1.5px solid #e91e8c">
+            Back to Home
+        </button>
+    </a>
+</div>
     </div>
 
    <script>
