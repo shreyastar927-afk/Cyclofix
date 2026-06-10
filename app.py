@@ -139,8 +139,37 @@ def home():
         current_day = 1
     insight = generate_weekly_insight(current_user.id)
     phase = get_cycle_phase(current_day, current_user.cycle_length)
-    return render_template('base.html', user=current_user, current_day=current_day, insight=insight, phase=phase)
 
+    # Period prediction warning
+    days_until_period = current_user.cycle_length - current_day
+    period_warning = None
+
+    if days_until_period == 3:
+        period_warning = {
+            'days': 3,
+            'message': "Your period is predicted in 3 days. You might want to prepare.",
+            'emoji': '🌸'
+        }
+    elif days_until_period == 2:
+        period_warning = {
+            'days': 2,
+            'message': "Your period is predicted in 2 days. Stock up on what helps you.",
+            'emoji': '🌸'
+        }
+    elif days_until_period == 1:
+        period_warning = {
+            'days': 1,
+            'message': "Your period may arrive tomorrow. Take it easy today.",
+            'emoji': '🌸'
+        }
+    elif days_until_period <= 0:
+        period_warning = {
+            'days': 0,
+            'message': "Your period may have started today — did it?",
+            'emoji': '🩸'
+        }
+
+    return render_template('base.html', user=current_user, current_day=current_day, insight=insight, phase=phase, period_warning=period_warning)
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
