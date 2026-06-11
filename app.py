@@ -244,7 +244,7 @@ def log_pain():
         return redirect(url_for('suggestions'))
 
     
-    return render_template('log.html', today=date_type.today())
+    return render_template('log.html', today=date.today())
 @app.route('/suggestions')
 @login_required
 def suggestions():
