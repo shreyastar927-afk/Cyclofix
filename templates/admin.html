@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CycloFix — Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container" style="max-width:600px">
+        <h1>CycloFix 🌸</h1>
+        <h2>Admin Dashboard</h2>
+
+        <!-- Summary stats -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:1.5rem">
+            <div class="scope-card">
+                <div style="font-size:11px;color:#999">Users</div>
+                <div style="font-size:1.5rem;font-weight:700;color:#e91e8c">{{ total }}</div>
+            </div>
+            <div class="scope-card">
+                <div style="font-size:11px;color:#999">Total logs</div>
+                <div style="font-size:1.5rem;font-weight:700;color:#e91e8c">{{ total_logs }}</div>
+            </div>
+            <div class="scope-card">
+                <div style="font-size:11px;color:#999">Helpful</div>
+                <div style="font-size:1.5rem;font-weight:700;color:#e91e8c">{{ total_feedback }}</div>
+            </div>
+        </div>
+
+        <!-- Per user cards -->
+        {% for user in users %}
+        <div class="suggestion-card" style="margin-bottom:12px;text-align:left">
+            
+            <!-- Header -->
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+                <div>
+                    <div style="font-size:15px;font-weight:600;color:#333">{{ user.name }}</div>
+                    <div style="font-size:11px;color:#999">{{ user.email }}</div>
+                    <div style="font-size:11px;color:#999;margin-top:2px">Joined {{ user.joined }}</div>
+                </div>
+                <div style="text-align:right">
+                    <div style="font-size:11px;color:{% if user.last_active == 'Never' %}#ccc{% else %}#4CAF50{% endif %}">
+                        Last active<br>{{ user.last_active }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats row -->
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+                <div class="stat-pill">📝 {{ user.total_logs }} logs</div>
+                <div class="stat-pill">📅 Day {{ user.cycle_day }}</div>
+                <div class="stat-pill">💡 {{ user.feedback_given }} helpful</div>
+            </div>
+
+            <!-- Pain insights -->
+            <div style="background:#fff5f7;border-radius:8px;padding:10px;font-size:12px;color:#555;line-height:1.8">
+                <div>🩸 Most common pain: <strong>{{ user.most_common_pain | capitalize }}</strong></div>
+                <div>📊 Average pain intensity: <strong>{{ user.avg_pain }}/10</strong></div>
+                <div>⚡ Worst pain logged: <strong>{{ user.worst_pain }}/10</strong></div>
+                <div>✅ What helped most: <strong>{{ user.top_relief | capitalize }}</strong></div>
+            </div>
+
+        </div>
+        {% endfor %}
+
+        <p style="margin-top:1rem;font-size:12px;color:#999">
+            Only visible to you 🔒
+        </p>
+        <p><a href="/">← Back to home</a></p>
+    </div>
+</body>
+</html>

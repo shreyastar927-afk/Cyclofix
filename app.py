@@ -424,3 +424,66 @@ def profile():
         return redirect(url_for('profile'))
 
     return render_template('profile.html', user=current_user, today=date.today())
+@app.route('/admin')
+@login_required
+def admin():
+    if current_user.email != 'shreyastar927@gmail.com':
+        return redirect(url_for('home'))
+    
+    users = User.query.all()
+    
+    user_stats = []
+    for user in users:
+        logs = CycleLog.query.filter_by(user_id=user.id).filter(
+            CycleLog.pain_intensity != None
+        ).all()
+        
+        last_log = CycleLog.query.filter_by(
+            user_id=user.id
+        ).order_by(CycleLog.created_at.desc()).first()
+        
+        # What helped them
+        helpful_logs = [l for l in logs if l.relief_helped == 'yes' and l.relief_suggestion]
+        from collections import Counter
+        help_counts = Counter([l.relief_suggestion for l in helpful_logs])
+        top_relief = help_counts.most_common(1)[0][0] if help_counts else 'None yet'
+        
+        # Pain breakdown
+        pain_types = Counter([l.pain_type for l in logs if l.pain_type])
+        most_common_pain = pain_types.most_common(1)[0][0] if pain_types else 'None yet'
+        
+        # Average pain
+        pain_scores = [l.pain_intensity for l in logs if l.pain_intensity]
+        avg_pain = round(sum(pain_scores) / len(pain_scores), 1) if pain_scores else 0
+        
+        # Worst pain
+        worst_pain = max(pain_scores) if pain_scores else 0
+        
+        user_stats.append({
+            'name': user.name,
+            'email': user.email,
+            'joined': user.created_at.strftime('%d %b %Y') if user.created_at else 'N/A',
+            'total_logs': len(logs),
+            'last_active': last_log.date.strftime('%d %b %Y') if last_log else 'Never',
+            'feedback_given': len(helpful_logs),
+            'cycle_day': (date.today() - user.last_period_start).days + 1 if user.last_period_start else 'N/A',
+            'top_relief': top_relief,
+            'most_common_pain': most_common_pain,
+            'avg_pain': avg_pain,
+            'worst_pain': worst_pain,
+        })
+    
+    total_logs = sum(u['total_logs'] for u in user_stats)
+    total_feedback = sum(u['feedback_given'] for u in user_stats)
+    
+    return render_template('admin.html', 
+        users=user_stats, 
+        total=len(users),
+        total_logs=total_logs,
+        total_feedback=total_feedback
+    )
+
+if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
+    app.run(debug=True)
