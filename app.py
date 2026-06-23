@@ -113,7 +113,8 @@ def get_cycle_phase(cycle_day, cycle_length=28):
         }
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'cyclofix-secret-key'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cyclofix.db'
+import os
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///cyclofix.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['REMEMBER_COOKIE_SECURE'] = True
 app.config['REMEMBER_COOKIE_HTTPONLY'] = True
