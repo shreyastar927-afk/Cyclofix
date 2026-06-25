@@ -121,7 +121,9 @@ app.config['REMEMBER_COOKIE_HTTPONLY'] = True
 app.config['REMEMBER_COOKIE_SAMESITE'] = 'Lax'
 
 db.init_app(app)
-with app.app_context():
+
+@app.before_request
+def create_tables():
     db.create_all()
 
 login_manager = LoginManager()
