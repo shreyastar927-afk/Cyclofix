@@ -262,7 +262,7 @@ input[type="range"] {
 
 .feedback-btn.yes:hover { background: #4CAF50; color: white; border-color: #4CAF50; }
 .feedback-btn.somewhat:hover { background: #FF9800; color: white; border-color: #FF9800; }
-.feedback-btn.no:hover { background: #ccc; color: white; border-color: #ccc; }
+.feedback-btn.no:hover { background: #ffebee; color: #e53935; border-color: #e53935; }
 
 .feedback-thanks {
     font-size: 12px;
@@ -385,9 +385,10 @@ input[type="range"] {
 }
 
 .selected-no {
-    background: #999 !important;
+    background: #e53935 !important;
     color: white !important;
-    border-color: #999 !important;
+    border-color: #e53935 !important;
+    opacity: 1 !important;
 }
 .feedback-btn {
     padding: 6px 14px;
