@@ -75,24 +75,28 @@
 const feedbackState = {};
 
 function submitFeedback(suggestion, response, btn) {
-    // Allow changing — remove selected state from all buttons in this group
     const group = document.getElementById('feedback-' + suggestion);
     group.querySelectorAll('button').forEach(b => {
         b.classList.remove('selected-yes', 'selected-somewhat', 'selected-no');
-        b.style.opacity = '1';
+        b.style.background = '';
+        b.style.color = '';
+        b.style.borderColor = '';
     });
 
-    // Highlight selected button
-    btn.classList.add('selected-' + response);
+    if (response === 'yes') {
+        btn.style.cssText = 'background:#4CAF50 !important;color:white !important;border-color:#4CAF50 !important';
+    } else if (response === 'somewhat') {
+        btn.style.cssText = 'background:#FF9800 !important;color:white !important;border-color:#FF9800 !important';
+    } else {
+        btn.style.cssText = 'background:#e53935 !important;color:white !important;border-color:#e53935 !important';
+    }
 
-    // Save to server
     fetch('/feedback', {
         method: 'POST',
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         body: `suggestion=${encodeURIComponent(suggestion)}&response=${encodeURIComponent(response)}`
     }).then(r => {
         if (r.ok) {
-            // Show thanks only if first time
             if (!feedbackState[suggestion]) {
                 document.getElementById('thanks-' + suggestion).style.display = 'block';
             }
