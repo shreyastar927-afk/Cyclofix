@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CycloFix — Period Pain, Understood</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=3">
+    <style>
+        .landing-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 400px;
+            overflow: hidden;
+        }
+        .landing-hero {
+            background: linear-gradient(135deg, #e91e8c 0%, #ff6eb4 100%);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            color: white;
+        }
+        .landing-hero h1 {
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .landing-hero p {
+            color: rgba(255,255,255,0.9);
+            font-size: 15px;
+            margin-top: 0.5rem;
+            line-height: 1.6;
+        }
+        .landing-body {
+            padding: 1.5rem 2rem 2rem;
+        }
+        .feature {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 1rem;
+        }
+        .feature-emoji {
+            font-size: 1.4rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .feature-text {
+            flex: 1;
+        }
+        .feature-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 2px;
+        }
+        .feature-desc {
+            font-size: 12px;
+            color: #888;
+            line-height: 1.5;
+        }
+        .divider {
+            height: 0.5px;
+            background: #eee;
+            margin: 1.25rem 0;
+        }
+        .landing-cta {
+            text-align: center;
+        }
+        .landing-cta a {
+            display: block;
+            background: #e91e8c;
+            color: white;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            margin-bottom: 10px;
+            transition: background 0.2s;
+        }
+        .landing-cta a:hover {
+            background: #c2177a;
+        }
+        .landing-cta .login-link {
+            background: white;
+            color: #e91e8c;
+            border: 1.5px solid #e91e8c;
+            font-weight: 500;
+        }
+        .landing-cta .login-link:hover {
+            background: #fff5f7;
+        }
+        .tagline {
+            font-size: 11px;
+            color: #bbb;
+            margin-top: 1rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="landing-container">
+        <div class="landing-hero">
+            <h1>CycloFix 🌸</h1>
+            <p>Period pain that learns what helps <em>you</em> — not just generic advice.</p>
+        </div>
+
+        <div class="landing-body">
+            <div class="feature">
+                <div class="feature-emoji">📝</div>
+                <div class="feature-text">
+                    <div class="feature-title">Log pain in 10 seconds</div>
+                    <div class="feature-desc">Intensity, pain type, cycle day — done. No forms, no fuss.</div>
+                </div>
+            </div>
+            <div class="feature">
+                <div class="feature-emoji">💡</div>
+                <div class="feature-text">
+                    <div class="feature-title">Get personalised relief suggestions</div>
+                    <div class="feature-desc">Heat, rest, movement, breathing — ranked by what's actually worked for you before.</div>
+                </div>
+            </div>
+            <div class="feature">
+                <div class="feature-emoji">📈</div>
+                <div class="feature-text">
+                    <div class="feature-title">See your patterns over time</div>
+                    <div class="feature-desc">Know your worst days before they hit. Your body has a pattern — CycloFix finds it.</div>
+                </div>
+            </div>
+            <div class="feature">
+                <div class="feature-emoji">🔒</div>
+                <div class="feature-text">
+                    <div class="feature-title">Private and free</div>
+                    <div class="feature-desc">Your data is yours. No ads, no selling your information.</div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="landing-cta">
+                <a href="/signup">Get started free 🌸</a>
+                <a href="/login" class="login-link">Already have an account? Log in</a>
+            </div>
+
+            <p class="tagline">Built by a woman, for women 💪</p>
+        </div>
+    </div>
+</body>
+</html>

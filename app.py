@@ -128,7 +128,7 @@ def create_tables():
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'login'
+login_manager.login_view = 'landing'
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -175,6 +175,9 @@ def home():
         }
 
     return render_template('base.html', user=current_user, current_day=current_day, insight=insight, phase=phase, period_warning=period_warning)
+@app.route('/landing')
+def landing():
+    return render_template('landing.html')
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
