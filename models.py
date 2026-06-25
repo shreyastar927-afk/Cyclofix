@@ -6,9 +6,9 @@ db = SQLAlchemy()
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(150), unique=True, nullable=False)
-    password = db.Column(db.String(150), nullable=False)
-    name = db.Column(db.String(150), nullable=False)
+    email = db.Column(db.String(300), unique=True, nullable=False)
+    password = db.Column(db.String(600), nullable=False)
+    name = db.Column(db.String(300), nullable=False)
     last_period_start = db.Column(db.Date, nullable=True)
     cycle_length = db.Column(db.Integer, default=28)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
