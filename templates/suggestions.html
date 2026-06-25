@@ -21,7 +21,7 @@
 
         <div class="suggestions-list">
             <div style="font-size:11px;color:#e91e8c;text-align:right;margin-bottom:8px">
-    🌸 Pink border = helped you before
+    🌸 Your past favourites are highlighted
 </div>
             {% for s in suggestions %}
             <div class="suggestion-card {% if s in helpful %}previously-helped{% endif %}">
@@ -59,7 +59,7 @@
         {% endfor %}
         </div>
 
-       <div style="display:flex;flex-direction:column;gap:10px;margin-top:1.5rem">
+       <div style="display:flex;flex-direction:column;gap:16px;margin-top:2rem"></div>
     <a href="/log">
         <button>Log New Pain 🌸</button>
     </a>
